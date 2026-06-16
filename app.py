@@ -78,7 +78,13 @@ def generate_reflection(question, chosen_number, card, impression, orientation):
 
     prompt = f"""
 あなたは、未来を断定する占い師ではありません。
-タロットカードを使って、ユーザーの無意識や感情を丁寧に言語化する内省の案内人です。
+タロットカードを使って、ユーザーの無意識・感情・思考の癖を言語化し、質問者の自律と自己決定を促す内省の案内人です。
+
+この占いは、質問者を甘やかすためのものではありません。
+聞こえのいい言葉で安心させるのではなく、質問者が自分の本音、避けてきた感情、現実逃避、依存、試し行動、責任回避に気づけるようにしてください。
+
+ただし、人格否定や自尊心を傷つける言い方はしないでください。
+厳しさは、質問者の人生をよくするための思いやりとして使ってください。
 
 このサイトでは、ユーザーが選ぶ0〜21の数字はカード番号そのものではありません。
 その数字は、カードを開く前の儀式的な選択、入口、揺らぎとして扱ってください。
@@ -102,18 +108,29 @@ def generate_reflection(question, chosen_number, card, impression, orientation):
 【ユーザーがカードを見て感じたこと】
 {impression}
 
-文章の条件:
+文章の方針:
 - 未来を断定しない
-- 「あなたは必ず〜になる」「相手は〜と思っています」のように決めつけない
+- 相手の気持ちを決めつけない
 - カードの意味を押しつけない
-- ユーザーが画像を見て感じたことを最優先する
-- 正位置/逆位置は、良い悪いではなく、見方の違いとして扱う
-- ユーザーが選んだ数字は、カード番号ではなく、問いに入るための象徴として軽く扱う
-- やさしく、静かで、詩的すぎない文章にする
-- 300〜500字程度
-- 最後は、ユーザー自身に返す問いで終える
-- 宗教的・霊感商法的な言い方は避ける
-- 現実の選択や感情整理に戻れるようにする
+- ユーザーがカードを見て感じた印象を、深層心理や無視してきた感情の手がかりとして扱う
+- その印象が、悩みの中でどんな本音・不安・願望・逃避・執着を示している可能性があるかを言語化する
+- 現実逃避にならないように、質問者が自分で選び、自分の行動に責任を持つ方向へ戻す
+- 「感情を解放すること」だけを正義にしない
+- 感情に気づくことと、感情に飲まれて周囲にぶつけることは違うと伝える
+- 社会性、思いやり、他者への敬意を失わないように促す
+- 試し行動、当てつけの自由、被害者意識だけで動くことには注意を促す
+- 不安や怒りや悲しみは否定しないが、それを理由に人間関係を壊す行動を正当化しない
+- 感情はすぐには変えられないが、行動は変えられるという視点を入れる
+- どうにもならないことと、どうにかできることを分ける
+- どうにかできることに目を向けて、自分の人生を自分で動かす方向へ導く
+- 辛口でもよいが、質問者の人格否定はしない
+- 文章は500〜800字程度
+- 最後は、質問者が今すぐ取れる小さな行動、または自分に問い直すべき問いで終える
+
+出力の構成:
+1. カードと印象から見える深層心理
+2. そこに潜む注意点や現実逃避の可能性
+3. 質問者が自律的に取るべき行動・アドバイス
 """
 
     try:
@@ -147,52 +164,81 @@ def show_shuffle_animation():
         """
         <style>
         .shuffle-wrap {
-            height: 220px;
+            height: 230px;
             position: relative;
-            margin: 20px auto 30px auto;
+            margin: 22px auto 30px auto;
             max-width: 420px;
         }
+
         .shuffle-card {
-            width: 110px;
-            height: 170px;
-            border-radius: 14px;
+            width: 112px;
+            height: 176px;
+            border-radius: 10px;
             position: absolute;
             left: 50%;
             top: 20px;
             transform: translateX(-50%);
             background:
-                radial-gradient(circle at top, rgba(255,255,255,0.9), rgba(210,190,145,0.85)),
-                linear-gradient(135deg, #f6ecd5, #b99a5c);
-            border: 2px solid rgba(139, 105, 45, 0.8);
-            box-shadow: 0 12px 30px rgba(80, 60, 30, 0.25);
+                radial-gradient(circle at center, rgba(255, 248, 220, 0.96) 0%, rgba(230, 206, 150, 0.86) 22%, transparent 23%),
+                radial-gradient(circle at center, transparent 0%, transparent 38%, rgba(95, 70, 35, 0.35) 39%, transparent 42%),
+                linear-gradient(135deg, #efe0b8, #b88d42 48%, #f7edd1);
+            border: 2px solid rgba(105, 72, 25, 0.78);
+            box-shadow: 0 14px 34px rgba(80, 55, 25, 0.28);
+            overflow: hidden;
         }
-        .card-a { animation: shuffleA 1.3s ease-in-out infinite; }
-        .card-b { animation: shuffleB 1.3s ease-in-out infinite; }
-        .card-c { animation: shuffleC 1.3s ease-in-out infinite; }
+
+        .shuffle-card::before {
+            content: "";
+            position: absolute;
+            inset: 10px;
+            border: 1px solid rgba(255, 252, 230, 0.72);
+            border-radius: 7px;
+            box-shadow: inset 0 0 0 1px rgba(101, 70, 26, 0.3);
+        }
+
+        .shuffle-card::after {
+            content: "*";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -52%);
+            font-size: 2.4rem;
+            color: rgba(88, 61, 25, 0.72);
+            text-shadow: 0 1px 0 rgba(255, 250, 225, 0.8);
+        }
+
+        .card-a { animation: shuffleA 1.35s ease-in-out infinite; }
+        .card-b { animation: shuffleB 1.35s ease-in-out infinite; }
+        .card-c { animation: shuffleC 1.35s ease-in-out infinite; }
+
         @keyframes shuffleA {
             0% { transform: translateX(-50%) rotate(0deg); }
-            30% { transform: translateX(-160%) rotate(-14deg); }
-            70% { transform: translateX(60%) rotate(10deg); }
+            30% { transform: translateX(-160%) rotate(-13deg); }
+            70% { transform: translateX(58%) rotate(9deg); }
             100% { transform: translateX(-50%) rotate(0deg); }
         }
+
         @keyframes shuffleB {
             0% { transform: translateX(-50%) rotate(0deg); }
             30% { transform: translateX(70%) rotate(12deg); }
-            70% { transform: translateX(-120%) rotate(-10deg); }
+            70% { transform: translateX(-115%) rotate(-9deg); }
             100% { transform: translateX(-50%) rotate(0deg); }
         }
+
         @keyframes shuffleC {
             0% { transform: translateX(-50%) rotate(0deg); }
-            40% { transform: translateX(-20%) translateY(-10px) rotate(6deg); }
-            80% { transform: translateX(25%) translateY(8px) rotate(-7deg); }
+            40% { transform: translateX(-18%) translateY(-12px) rotate(5deg); }
+            80% { transform: translateX(25%) translateY(8px) rotate(-6deg); }
             100% { transform: translateX(-50%) rotate(0deg); }
         }
+
         .shuffle-text {
             text-align: center;
-            color: #7c6840;
-            letter-spacing: 0.08em;
-            margin-top: -12px;
+            color: #7a5b25;
+            letter-spacing: 0.12em;
+            margin-top: -8px;
             font-size: 0.95rem;
+            font-family: Georgia, "Times New Roman", serif;
         }
         </style>
 
@@ -201,7 +247,7 @@ def show_shuffle_animation():
             <div class="shuffle-card card-b"></div>
             <div class="shuffle-card card-c"></div>
         </div>
-        <div class="shuffle-text">カードをシャッフルしています...</div>
+        <div class="shuffle-text">The cards are shifting...</div>
         """,
         unsafe_allow_html=True,
     )
@@ -233,59 +279,100 @@ for key, value in {
 st.markdown(
     """
     <style>
-    .stApp { background: #fbf7ef; }
-    .block-container { max-width: 780px; padding-top: 3rem; padding-bottom: 4rem; }
-    h1, h2, h3 { color: #4f4638; letter-spacing: 0.04em; }
-    p, label, div { color: #4f4638; }
+    .stApp {
+        background:
+            radial-gradient(circle at top, rgba(255, 248, 226, 0.95), rgba(246, 239, 222, 0.96) 38%, #efe4d1 100%);
+    }
+
+    .block-container {
+        max-width: 780px;
+        padding-top: 3rem;
+        padding-bottom: 4rem;
+    }
+
+    h1 {
+        text-align: center;
+        color: #4b3d2a;
+        letter-spacing: 0.14em;
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 500;
+    }
+
+    h2, h3 {
+        color: #4f4638;
+        letter-spacing: 0.04em;
+    }
+
+    p, label, div {
+        color: #4f4638;
+    }
+
+    .intro-box,
+    .question-box,
+    .meaning-box,
+    .reflection-box {
+        background:
+            linear-gradient(180deg, rgba(255, 252, 244, 0.94), rgba(246, 235, 213, 0.88));
+        border: 1px solid rgba(168, 130, 62, 0.38);
+        box-shadow: 0 10px 28px rgba(90, 65, 30, 0.08);
+    }
+
     .intro-box {
         padding: 1.2rem 1.4rem;
-        border: 1px solid rgba(160, 130, 80, 0.35);
-        border-radius: 18px;
-        background: rgba(255, 252, 244, 0.75);
+        border-radius: 16px;
         line-height: 1.9;
         margin-bottom: 1.5rem;
     }
+
+    .question-box,
+    .meaning-box {
+        padding: 1rem 1.2rem;
+        border-radius: 14px;
+        line-height: 1.8;
+        margin-bottom: 1.2rem;
+    }
+
     .card-title {
         text-align: center;
-        font-size: 1.5rem;
-        letter-spacing: 0.14em;
+        font-size: 1.55rem;
+        letter-spacing: 0.16em;
         margin-top: 1rem;
         margin-bottom: 0.2rem;
-        color: #8a6f3f;
+        color: #7a5b25;
+        font-family: Georgia, "Times New Roman", serif;
     }
+
     .card-subtitle {
         text-align: center;
         font-size: 1rem;
         margin-bottom: 0.6rem;
         color: #6d6355;
     }
+
     .orientation {
         text-align: center;
         display: inline-block;
-        padding: 0.35rem 0.9rem;
+        padding: 0.35rem 1rem;
         border-radius: 999px;
         background: rgba(184, 155, 94, 0.18);
-        border: 1px solid rgba(184, 155, 94, 0.4);
-        color: #7b6337;
+        border: 1px solid rgba(155, 112, 42, 0.48);
+        color: #705426;
         margin: 0 auto 1.2rem auto;
+        letter-spacing: 0.08em;
     }
-    .center { text-align: center; }
-    .meaning-box {
-        padding: 1rem 1.2rem;
-        border-radius: 14px;
-        background: rgba(255, 252, 244, 0.85);
-        border: 1px solid rgba(160, 130, 80, 0.25);
-        line-height: 1.8;
-        margin-bottom: 1.2rem;
+
+    .center {
+        text-align: center;
     }
+
     .reflection-box {
         padding: 1.4rem 1.5rem;
         border-left: 4px solid #b89b5e;
-        background: rgba(255, 252, 244, 0.9);
         border-radius: 12px;
         line-height: 2;
         white-space: pre-wrap;
     }
+
     .small-note {
         font-size: 0.9rem;
         color: #7d715f;
@@ -362,6 +449,16 @@ elif st.session_state.step == 2:
     meaning = get_card_meaning(card, orientation)
 
     st.subheader("2. カードを見る")
+
+    st.markdown("#### あなたの問い")
+    st.markdown(
+        f"""
+        <div class="question-box">
+        {st.session_state.question}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     st.markdown(
         f"""
